@@ -1,0 +1,5 @@
+rootProject.name = 'sleuth-amqp-poc'
+
+include 'remoting-amqp-common'
+include 'remoting-amqp-client'
+include 'remoting-amqp-server'

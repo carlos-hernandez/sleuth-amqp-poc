@@ -1,0 +1,51 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+allprojects {
+    apply plugin: 'groovy'
+
+    group = 'com.skytouch.microservices'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+
+    ext['groovy.version'] = '2.4.15'
+
+    dependencies {
+        compile "org.codehaus.groovy:groovy:${project['groovy.version']}"
+    }
+}
+
+configure([project(':remoting-amqp-client'), project(':remoting-amqp-server')]) {
+
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    ext {
+        springCloudVersion = 'Finchley.RC1'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}

@@ -1,15 +1,9 @@
 package com.skytouch.microservices.poc.sleuth.amqp.model
 
-class Booking implements Serializable {
+import groovy.transform.Canonical
 
-    private String bookingCode
+@Canonical
+class Booking {
 
-    Booking(String bookingCode) {
-        this.bookingCode = bookingCode
-    }
-
-    @Override
-    String toString() {
-        return String.format("Ride confirmed: code '%s'.", bookingCode)
-    }
+    String bookingCode
 }

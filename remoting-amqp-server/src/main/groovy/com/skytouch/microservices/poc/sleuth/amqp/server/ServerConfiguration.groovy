@@ -1,16 +1,24 @@
 package com.skytouch.microservices.poc.sleuth.amqp.server
 
-import com.skytouch.microservices.poc.sleuth.amqp.service.BookingService
-import org.springframework.amqp.core.AmqpTemplate
+import org.springframework.amqp.core.Binding
+import org.springframework.amqp.core.BindingBuilder
+import org.springframework.amqp.core.DirectExchange
 import org.springframework.amqp.core.Queue
+import org.springframework.amqp.rabbit.annotation.EnableRabbit
+import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer
-import org.springframework.amqp.remoting.service.AmqpInvokerServiceExporter
+import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.messaging.converter.MappingJackson2MessageConverter
+import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory
+import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory
 
 @Configuration
-class ServerConfiguration {
+@EnableRabbit
+class ServerConfiguration implements RabbitListenerConfigurer {
 
     @Bean
     Queue queue() {
@@ -18,21 +26,38 @@ class ServerConfiguration {
     }
 
     @Bean
-    AmqpInvokerServiceExporter exporter(BookingService implementation, AmqpTemplate template) {
-        def exporter = new AmqpInvokerServiceExporter()
-        exporter.serviceInterface = BookingService
-        exporter.service = implementation
-        exporter.amqpTemplate = template
-
-        return exporter
+    DirectExchange directExchange() {
+        return new DirectExchange('remoting.exchange')
     }
 
     @Bean
-    SimpleMessageListenerContainer listener(ConnectionFactory factory, AmqpInvokerServiceExporter exporter, Queue queue) {
-        def container = new SimpleMessageListenerContainer(factory)
-        container.messageListener = exporter
-        container.setQueueNames(queue.name)
+    Binding binding(Queue queue, DirectExchange directExchange) {
+        return BindingBuilder.bind(queue).to(directExchange).with('remoting.binding')
+    }
 
-        return container
+    @Bean
+    SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory rabbitConnectionFactory) {
+        def listenerContainerFactory = new SimpleRabbitListenerContainerFactory()
+        listenerContainerFactory.with {
+            connectionFactory = rabbitConnectionFactory
+            messageConverter = new Jackson2JsonMessageConverter()
+        }
+
+        return listenerContainerFactory
+    }
+
+    @Bean
+    MessageHandlerMethodFactory messageHandlerMethodFactory() {
+        def messageHandlerMethodFactory = new DefaultMessageHandlerMethodFactory()
+        messageHandlerMethodFactory.with {
+            messageConverter = new MappingJackson2MessageConverter()
+        }
+
+        return messageHandlerMethodFactory
+    }
+
+    @Override
+    void configureRabbitListeners(final RabbitListenerEndpointRegistrar registrar) {
+        registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory())
     }
 }

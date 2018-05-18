@@ -1,7 +1,14 @@
 spring:
+  application:
+    name: remoting-amqp-client
   rabbitmq:
     dynamic: true
     host: localhost
     port: 5672
     username: guest
     password: guest
+
+logging:
+  level:
+    org.springframework.amqp: WARN
+    org.springframework.scheduling: WARN

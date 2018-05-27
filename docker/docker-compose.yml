@@ -56,8 +56,8 @@ services:
     environment:
        - STORAGE_TYPE=elasticsearch
        - ES_HOSTS=elasticsearch
-#    ports:
-#      - 9411:9411
+    ports:
+      - 9411:9411
     networks:
       - elk
       - zipkin

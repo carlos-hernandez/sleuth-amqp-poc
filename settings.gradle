@@ -1,4 +1,4 @@
-rootProject.name = 'sleuth-amqp-poc'
+rootProject.name = 'spring-distributed-tracing'
 
 include 'remoting-amqp-common'
 include 'remoting-amqp-client'

@@ -8,8 +8,8 @@ spring:
     username: guest
     password: guest
   zipkin:
-      sender:
-        type: web
+    sender:
+      type: rabbit
 
 logging:
   path: ./${spring.application.name}/logs

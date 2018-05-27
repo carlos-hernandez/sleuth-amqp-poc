@@ -19,3 +19,7 @@ out/
 .settings
 .springBeans
 bin
+
+### Miscelaneous
+data/
+logs/

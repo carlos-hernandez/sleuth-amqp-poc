@@ -45,6 +45,12 @@ configure([project(':remoting-amqp-client'), project(':remoting-amqp-server')]) 
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
         }
     }
+
+    processResources {
+        filesMatching('bootstrap.yml') {
+            expand(project.properties)
+        }
+    }
 }
 
 wrapper {

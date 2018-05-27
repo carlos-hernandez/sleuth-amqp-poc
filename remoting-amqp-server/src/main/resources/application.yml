@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: remoting-amqp-server
   rabbitmq:
     dynamic: true
     host: localhost
@@ -12,8 +10,8 @@ spring:
       type: rabbit
 
 logging:
-  path: ./${spring.application.name}/logs
-  file: ./${spring.application.name}/logs/${spring.application.name}.log
+  path: ./logs
+  file: ./logs/${spring.application.name}.log
   level:
     org.springframework.amqp: WARN
     org.springframework.scheduling: WARN

@@ -3,6 +3,9 @@
 
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
+    <springProperty name="serviceName" source="spring.application.name"/>
+    <springProperty name="serviceVersion" source="spring.application.version"/>
+
     <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>localhost:5000</destination>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
@@ -15,8 +18,8 @@
                 <pattern>
                     <pattern>
                         {
-                        "appName": "remoting-amqp-client",
-                        "appVersion": "1.0"
+                        "service": "${serviceName:-}",
+                        "service-version": "${serviceVersion:-}"
                         }
                     </pattern>
                 </pattern>

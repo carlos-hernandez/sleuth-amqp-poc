@@ -8,3 +8,7 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-zipkin'
     compile "net.logstash.logback:logstash-logback-encoder:${project['logstashLogbackVersion']}"
 }
+
+bootRun {
+    jvmArgs = ["-Dspring.output.ansi.enabled=ALWAYS"]
+}

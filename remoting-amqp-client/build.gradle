@@ -5,4 +5,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind'
 
     compile 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    compile "net.logstash.logback:logstash-logback-encoder:${project['logstashLogbackVersion']}"
 }

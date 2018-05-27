@@ -1,5 +1,6 @@
 package com.skytouch.microservices.poc.sleuth.amqp.server
 
+import brave.sampler.Sampler
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
 import org.springframework.amqp.core.DirectExchange
@@ -59,5 +60,10 @@ class ServerConfiguration implements RabbitListenerConfigurer {
     @Override
     void configureRabbitListeners(final RabbitListenerEndpointRegistrar registrar) {
         registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory())
+    }
+
+    @Bean
+    Sampler sleuthTraceSampler() {
+        return Sampler.ALWAYS_SAMPLE
     }
 }

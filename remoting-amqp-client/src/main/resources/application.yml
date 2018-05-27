@@ -9,6 +9,8 @@ spring:
     password: guest
 
 logging:
+  path: ./${spring.application.name}/logs
+  file: ./${spring.application.name}/logs/${spring.application.name}.log
   level:
     org.springframework.amqp: WARN
     org.springframework.scheduling: WARN

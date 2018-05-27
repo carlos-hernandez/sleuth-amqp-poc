@@ -1,5 +1,6 @@
 package com.skytouch.microservices.poc.sleuth.amqp.client
 
+import brave.sampler.Sampler
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
@@ -18,5 +19,10 @@ class ClientConfiguration {
         }
 
         return rabbitTemplate
+    }
+
+    @Bean
+    Sampler sleuthTraceSampler() {
+        return Sampler.ALWAYS_SAMPLE
     }
 }

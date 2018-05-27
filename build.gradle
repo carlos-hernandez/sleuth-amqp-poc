@@ -37,6 +37,7 @@ configure([project(':remoting-amqp-client'), project(':remoting-amqp-server')]) 
 
     ext {
         springCloudVersion = 'Finchley.RC1'
+        logstashLogbackVersion = '5.1'
     }
 
     dependencyManagement {
